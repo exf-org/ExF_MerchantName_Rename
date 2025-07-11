@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
-using System.Data.SQLite;
+using System.Data.SQLite;　
 using System.Collections.Specialized;
 using System.Collections;
 using System.Data;
@@ -65,6 +65,7 @@ namespace ExF_MerchantName_Rename
             //iniFilePathが指定されていなければエラー
             if (args[0] == "")
             {
+                ret = 1;
                 ErrMsg = "batにiniFilePathが指定されていません";
                 CreateLog(ErrMsg);
                 MessageBox.Show(ErrMsg, "エラー",
@@ -72,8 +73,6 @@ namespace ExF_MerchantName_Rename
                 MessageBoxIcon.Error,
                 MessageBoxDefaultButton.Button1,
                 MessageBoxOptions.DefaultDesktopOnly);
-
-                ret = 1;
                 Environment.Exit(ret);
             }
             else
@@ -85,6 +84,7 @@ namespace ExF_MerchantName_Rename
             //LogFolderPathが指定されていなければエラー
             if (args[1] == "")
             {
+                ret = 1;
                 ErrMsg = "batにLogFolderPathが指定されていません";
                 CreateLog(ErrMsg);
                 MessageBox.Show(ErrMsg, "エラー",
@@ -92,8 +92,6 @@ namespace ExF_MerchantName_Rename
                 MessageBoxIcon.Error,
                 MessageBoxDefaultButton.Button1,
                 MessageBoxOptions.DefaultDesktopOnly);
-
-                ret = 1;
                 Environment.Exit(ret);
             }
             else
@@ -115,13 +113,13 @@ namespace ExF_MerchantName_Rename
             }
             else
             {
+                ret = 1;
                 ErrMsg = "batで指定されたLogFolderPathが存在しません";
                 MessageBox.Show(ErrMsg, "エラー",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error,
                 MessageBoxDefaultButton.Button1,
                 MessageBoxOptions.DefaultDesktopOnly);
-                ret = 1;
                 //プログラムを終了させる
                 Environment.Exit(ret);
             }
@@ -133,15 +131,17 @@ namespace ExF_MerchantName_Rename
             }
             else
             {
+                ret = 1;
                 ErrMsg = "iniファイルとして指定されたファイルが存在しません";
                 CreateLog(ErrMsg);
+                CreateLog($"処理終了", "Status：" + ret.ToString());
+                CreateLog($"-----------------------------------------------------------------");
                 MessageBox.Show(ErrMsg, "エラー",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error,
                 MessageBoxDefaultButton.Button1,
                 MessageBoxOptions.DefaultDesktopOnly);
                 File.WriteAllText(LogFilePath, SB_log.ToString(), sjis);
-                ret = 1;
                 Environment.Exit(ret);
             }
 
@@ -152,6 +152,7 @@ namespace ExF_MerchantName_Rename
             string InFolderPath = "";
             string OutFolderPath = "";
             string DBFolderPath = "";
+            string ACQ = "";
             string MerchantCode_Col = "";
             string MerchantName_Col = "";
             string StoreName_Col = "";
@@ -160,6 +161,7 @@ namespace ExF_MerchantName_Rename
             InFolderPath = ((OrderedDictionary)ExF_iniFile.dicSECs["設定"])["InFolderPath"].ToString();
             OutFolderPath = ((OrderedDictionary)ExF_iniFile.dicSECs["設定"])["OutFolderPath"].ToString();
             DBFolderPath = ((OrderedDictionary)ExF_iniFile.dicSECs["設定"])["DBFolderPath"].ToString();
+            ACQ = ((OrderedDictionary)ExF_iniFile.dicSECs["設定"])["ACQ"].ToString();
             MerchantCode_Col = ((OrderedDictionary)ExF_iniFile.dicSECs["設定"])["MerchantCode_Col"].ToString();
             MerchantName_Col = ((OrderedDictionary)ExF_iniFile.dicSECs["設定"])["MerchantName_Col"].ToString();
             StoreName_Col = ((OrderedDictionary)ExF_iniFile.dicSECs["設定"])["StoreName_Col"].ToString();
@@ -167,6 +169,7 @@ namespace ExF_MerchantName_Rename
             //InFolderPathのディレクトリが存在しない場合はエラー--------------------------------------------------------------
             if (!Directory.Exists(InFolderPath))
             {
+                ret = 1;
                 ErrMsg = "iniFileで指定されたInFolderPathが存在しません";
                 CreateLog(ErrMsg);
                 MessageBox.Show(ErrMsg, "エラー",
@@ -175,7 +178,6 @@ namespace ExF_MerchantName_Rename
                 MessageBoxDefaultButton.Button1,
                 MessageBoxOptions.DefaultDesktopOnly);
                 File.WriteAllText(LogFilePath, SB_log.ToString(), sjis);
-                ret = 1;
                 //プログラムを終了させる
                 Environment.Exit(ret);
             }
@@ -184,15 +186,17 @@ namespace ExF_MerchantName_Rename
             //OutFolderPathのディレクトリが存在しない場合はエラー--------------------------------------------------------------
             if (!Directory.Exists(OutFolderPath))
             {
+                ret = 1;
                 ErrMsg = "iniFileで指定されたOutFolderPathが存在しません";
                 CreateLog(ErrMsg);
+                CreateLog($"処理終了", "Status：" + ret.ToString());
+                CreateLog($"-----------------------------------------------------------------");
                 MessageBox.Show(ErrMsg, "エラー",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error,
                 MessageBoxDefaultButton.Button1,
                 MessageBoxOptions.DefaultDesktopOnly);
                 File.WriteAllText(LogFilePath, SB_log.ToString(), sjis);
-                ret = 1;
                 //プログラムを終了させる
                 Environment.Exit(ret);
             }
@@ -201,15 +205,17 @@ namespace ExF_MerchantName_Rename
             //DBFolderPathのディレクトリが存在しない場合はエラー--------------------------------------------------------------
             if (!Directory.Exists(DBFolderPath))
             {
+                ret = 1;
                 ErrMsg = "iniFileで指定されたDBFolderPathが存在しません";
                 CreateLog(ErrMsg);
+                CreateLog($"処理終了", "Status：" + ret.ToString());
+                CreateLog($"-----------------------------------------------------------------");
                 MessageBox.Show(ErrMsg, "エラー",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error,
                 MessageBoxDefaultButton.Button1,
                 MessageBoxOptions.DefaultDesktopOnly);
                 File.WriteAllText(LogFilePath, SB_log.ToString(), sjis);
-                ret = 1;
                 //プログラムを終了させる
                 Environment.Exit(ret);
             }
@@ -225,15 +231,17 @@ namespace ExF_MerchantName_Rename
             }
             else 
             {
+                ret = 1;
                 ErrMsg = "対象のフォルダ内にテキストファイルが1件も見つかりませんでした。";
                 CreateLog(ErrMsg);
+                CreateLog($"処理終了", "Status：" + ret.ToString());
+                CreateLog($"-----------------------------------------------------------------");
                 MessageBox.Show(ErrMsg, "エラー",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error,
                 MessageBoxDefaultButton.Button1,
                 MessageBoxOptions.DefaultDesktopOnly);
                 File.WriteAllText(LogFilePath, SB_log.ToString(), sjis);
-                ret = 1;
                 //プログラムを終了させる
                 Environment.Exit(ret);
             }
@@ -301,7 +309,8 @@ namespace ExF_MerchantName_Rename
                         sql.Add("FROM");
                         sql.Add("M_MERCHANT");
                         sql.Add("WHERE");
-                        sql.Add("MERCHANT_CD LIKE '00000002001924%'");//(STORES_924の全加盟店)
+                        //sql.Add("MERCHANT_CD LIKE '00000002001924%'");//(STORES_924の全加盟店)
+                        sql.Add($"MERCHANT_CD LIKE '{ACQ}%'");
                         sql.Add("ORDER BY");
                         sql.Add("MERCHANT_CD ASC");
 
@@ -370,6 +379,7 @@ namespace ExF_MerchantName_Rename
                     //finallyとは例外の有無に関わらず、最後に必ず実行される処理
                     finally
                     {
+                        CreateLog($"DBの処理終了");
                         //DBを閉じる
                         conn.Close();
                     }
@@ -381,7 +391,18 @@ namespace ExF_MerchantName_Rename
             catch (Exception)
             {
                 ret = 1;
-                throw;
+                ErrMsg = "SQLの実行において、想定されないエラーが発生しました。DBの更新もしくはiniファイルのACQが正しいか確認してください。";
+                CreateLog(ErrMsg);
+                CreateLog($"処理終了", "Status：" + ret.ToString());
+                CreateLog($"-----------------------------------------------------------------");
+                MessageBox.Show(ErrMsg, "エラー",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button1,
+                MessageBoxOptions.DefaultDesktopOnly);
+                File.WriteAllText(LogFilePath, SB_log.ToString(), sjis);
+                //プログラムを終了させる
+                Environment.Exit(ret);
             }
             //-----------------------------------------------------------------
 
@@ -483,17 +504,19 @@ namespace ExF_MerchantName_Rename
                         }
                         else
                         {
+                            ret = 1;
                             //20桁の加盟店コードの記載はあるが、dic_Outに一致する加盟店コードが存在しない
                             ErrMsg = $"20桁の加盟店コードの記載はありますが、DBに一致する加盟店コードが存在しません。DBを更新してください。" + 
                             ($"依頼書 {No} レコード目：加盟店コード({MerchantCode_Col_Index})「{MerchantName_Col_Index}」→ DB：「見つかりませんでした」");
                             CreateLog(ErrMsg);
+                            CreateLog($"処理終了", "Status：" + ret.ToString());
+                            CreateLog($"-----------------------------------------------------------------");
                             MessageBox.Show(ErrMsg, "エラー",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error,
                             MessageBoxDefaultButton.Button1,
                             MessageBoxOptions.DefaultDesktopOnly);
                             File.WriteAllText(LogFilePath, SB_log.ToString(), sjis);
-                            ret = 1;
                             //プログラムを終了させる
                             Environment.Exit(ret);
                         }
@@ -501,16 +524,18 @@ namespace ExF_MerchantName_Rename
                     else
                     {
                         //記載はあるが、20桁ではないためエラー
+                        ret = 1;
                         ErrMsg = $"加盟店コードの記載はありますが、20桁ではありません。" +
                         ($"依頼書 {No} レコード目：加盟店コード({MerchantCode_Col_Index})「{MerchantName_Col_Index}」→{MerchantCode_Col_Index.Length}桁");
                         CreateLog(ErrMsg);
+                        CreateLog($"処理終了", "Status：" + ret.ToString());
+                        CreateLog($"-----------------------------------------------------------------");
                         MessageBox.Show(ErrMsg, "エラー",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error,
                         MessageBoxDefaultButton.Button1,
                         MessageBoxOptions.DefaultDesktopOnly);
                         File.WriteAllText(LogFilePath, SB_log.ToString(), sjis);
-                        ret = 1;
                         //プログラムを終了させる
                         Environment.Exit(ret);
                     }
